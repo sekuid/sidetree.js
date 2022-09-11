@@ -22,3 +22,10 @@ services:
     restart: always
     ports:
       - '27017:27017'
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    command: "azurite-blob --blobHost 0.0.0.0"
+    ports:
+      - "10000:10000"
+      - "10001:10001"

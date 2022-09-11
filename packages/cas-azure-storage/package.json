@@ -1,0 +1,49 @@
+{
+  "name": "@sidetree/cas-azure-storage",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "thomas-tran (https://github.com/thomas-tran)",
+  "contributors": [
+    "Orie Steele (https://github.com/OR13)",
+    "gjgd (https://github.com/gjgd)"
+  ],
+  "module": "dist/cas-azure-storage.esm.js",
+  "version": "0.3.1-unstable.60",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint src",
+    "lint:fix": "tsdx lint src --fix",
+    "prepare": "tsdx build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^3.0.0",
+    "@sidetree/cas": "^0.3.1-unstable.60",
+    "jest-environment-node": "^27.2.5",
+    "tsdx": "^0.14.1"
+  },
+  "peerDependencies": {
+    "@azure/storage-blob": "^12.11.0"
+  },
+  "dependencies": {
+    "@sidetree/common": "^0.3.1-unstable.60",
+    "@azure/storage-blob": "^12.11.0",
+    "ipfs-unixfs": "^2.0.3",
+    "ipld-dag-pb": "^0.20.0"
+  },
+  "gitHead": "e97862f01a5ad9845d82eb57ca46d335a98aeb8b",
+  "homepage": "https://github.com/transmute-industries/sidetree.js/tree/main/packages/cas-azure-storage",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/transmute-industries/sidetree.js.git",
+    "directory": "packages/cas-azure-storage"
+  }
+}

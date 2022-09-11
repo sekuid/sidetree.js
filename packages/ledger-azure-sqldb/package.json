@@ -1,0 +1,49 @@
+{
+  "name": "@sidetree/azure-sqldb",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Thomas Tran (https://github.com/thomas-tran)",
+  "contributors": [
+    "Orie Steele (https://github.com/OR13)",
+    "gjgd (https://github.com/gjgd)"
+  ],
+  "module": "dist/azure-sqldb.esm.js",
+  "version": "0.3.1-unstable.60",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "IMPORT_SQLITE=true tsdx test",
+    "lint": "tsdx lint src",
+    "lint:fix": "tsdx lint src --fix",
+    "prepare": "tsdx build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^3.0.0",
+    "@sidetree/test-vectors": "^0.3.1-unstable.60",
+    "@types/sqlite3": "^3.1.7",
+    "tsdx": "^0.14.1"
+  },
+  "dependencies": {
+    "@sidetree/common": "^0.3.1-unstable.60",
+    "@sidetree/core": "^0.3.1-unstable.60",
+    "tedious": "^15.1.0",
+    "ion-js": "^4.1.0",
+    "jsbi": "^3.1.4",
+    "moment": "^2.29.1",
+    "sqlite3": "^5.0.2"
+  },
+  "homepage": "https://github.com/transmute-industries/sidetree.js/tree/main/packages/ledger-azure-sqldb",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/transmute-industries/sidetree.js.git",
+    "directory": "packages/ledger-azure-sqldb"
+  },
+  "gitHead": "e97862f01a5ad9845d82eb57ca46d335a98aeb8b"
+}

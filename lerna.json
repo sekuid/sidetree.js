@@ -3,6 +3,7 @@
     "packages/cas",
     "packages/cas-ipfs",
     "packages/cas-s3",
+    "packages/cas-azure-storage",
     "packages/common",
     "packages/core",
     "packages/crypto",
@@ -14,9 +15,9 @@
     "packages/ledger",
     "packages/ledger-ethereum",
     "packages/ledger-qldb",
+    "packages/ledger-azure-sqldb",
     "packages/test-vectors",
-    "packages/wallet",
-    "packages/dashboard"
+    "packages/wallet"
   ],
   "version": "0.3.1-unstable.60"
 }

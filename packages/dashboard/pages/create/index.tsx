@@ -6,7 +6,7 @@ import { Button, Box, LinearProgress, Typography, Paper } from '@mui/material';
 
 import { AppPage } from '../../components/app-page';
 import { dashboardWalletFactory } from '../../core/DashboardWallet';
-import { FormEvent } from 'react-transition-group/node_modules/@types/react';
+import { FormEvent } from 'react';
 
 import { uiConfigs } from '../../config';
 import { createDID } from '../../services/sidetree-node-client-api';
