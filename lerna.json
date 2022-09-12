@@ -15,7 +15,7 @@
     "packages/ledger",
     "packages/ledger-ethereum",
     "packages/ledger-qldb",
-    "packages/ledger-azure-sqldb",
+    "packages/ledger-ms-sqldb",
     "packages/test-vectors",
     "packages/wallet"
   ],

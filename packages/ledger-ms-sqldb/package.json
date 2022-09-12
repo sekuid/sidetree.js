@@ -1,5 +1,5 @@
 {
-  "name": "@sidetree/azure-sqldb",
+  "name": "@sidetree/ms-sqldb",
   "publishConfig": {
     "access": "public"
   },
@@ -8,7 +8,7 @@
     "Orie Steele (https://github.com/OR13)",
     "gjgd (https://github.com/gjgd)"
   ],
-  "module": "dist/azure-sqldb.esm.js",
+  "module": "dist/ms-sqldb.esm.js",
   "version": "0.3.1-unstable.60",
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -28,22 +28,23 @@
     "@rollup/plugin-replace": "^3.0.0",
     "@sidetree/test-vectors": "^0.3.1-unstable.60",
     "@types/sqlite3": "^3.1.7",
+    "@types/mssql": "^8.1.1",
     "tsdx": "^0.14.1"
   },
   "dependencies": {
     "@sidetree/common": "^0.3.1-unstable.60",
     "@sidetree/core": "^0.3.1-unstable.60",
-    "tedious": "^15.1.0",
+    "mssql": "^9.0.1",
     "ion-js": "^4.1.0",
     "jsbi": "^3.1.4",
     "moment": "^2.29.1",
     "sqlite3": "^5.0.2"
   },
-  "homepage": "https://github.com/transmute-industries/sidetree.js/tree/main/packages/ledger-azure-sqldb",
+  "homepage": "https://github.com/transmute-industries/sidetree.js/tree/main/packages/ledger-ms-sqldb",
   "repository": {
     "type": "git",
     "url": "https://github.com/transmute-industries/sidetree.js.git",
-    "directory": "packages/ledger-azure-sqldb"
+    "directory": "packages/ledger-ms-sqldb"
   },
   "gitHead": "e97862f01a5ad9845d82eb57ca46d335a98aeb8b"
 }
