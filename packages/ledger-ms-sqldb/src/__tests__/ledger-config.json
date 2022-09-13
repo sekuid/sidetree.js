@@ -1,0 +1,4 @@
+{
+    "connectionString": "Server=127.0.0.1;Database=RegistryDB;User Id=sa;Password=S3cur3P@ssW0rd!;Trusted_Connection=True;TrustServerCertificate=True;",
+    "tableName": "Transactions"
+  }

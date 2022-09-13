@@ -7,18 +7,32 @@ import {
   ValueTimeLockModel,
 } from '@sidetree/common';
 import { AnchoredDataSerializer } from '@sidetree/core';
-
+import { connect, ConnectionPool } from 'mssql';
 const { version } = require('../package.json');
+import moment from 'moment';
+import crypto from 'crypto';
+
+interface TransactionRecord {
+  CoreIndexFileUri: string;
+  NumberOfOperations: number;
+  TransactionTime: number;
+  TransactionTimeHash: number;
+  TransactionNumber: number;
+  TransactionTimestamp: Date;
+}
 
 export interface TransactionModelMsSqlDb extends TransactionModel {
   transactionTimestamp: number; // unix timestamp
 }
 
 export default class AzureSqlDbLedger implements IBlockchain {
-  public transactionTable: string;
+  public ledgerConnection: ConnectionPool;
 
-  constructor(tableName: string) {
-    this.transactionTable = tableName;
+  constructor(
+    public transactionTable: string,
+    private connectionString: string
+  ) {
+    this.ledgerConnection = new ConnectionPool(connectionString);
   }
 
   public getServiceVersion(): Promise<ServiceVersionModel> {
@@ -30,12 +44,28 @@ export default class AzureSqlDbLedger implements IBlockchain {
 
   public async reset(): Promise<void> {
     console.log('resetting', this.transactionTable);
-    // await this.executeWithRetry(`DELETE FROM ${this.transactionTable}`);
+
+    // connect to db
+    this.ledgerConnection = await connect(this.connectionString);
+
+    // create db table if it doesn't already exist
+    await this.ensureDbTableExists(this.transactionTable);
+
+    // delete all data
+    const deleteQuery = `DELETE ${this.transactionTable}`;
+
+    // execute query
+    await this.ledgerConnection.query(deleteQuery);
   }
 
   public async initialize(): Promise<void> {
     console.log('creating transaction table', this.transactionTable);
-    //await this.executeWithoutError(`CREATE TABLE ${this.transactionTable}`);
+
+    // connect to db
+    this.ledgerConnection = await connect(this.connectionString);
+
+    // create db table if it doesn't already exist
+    await this.ensureDbTableExists(this.transactionTable);
   }
 
   public async getFirstValidTransaction(
@@ -49,8 +79,29 @@ export default class AzureSqlDbLedger implements IBlockchain {
       coreIndexFileUri,
       numberOfOperations,
     } = AnchoredDataSerializer.deserialize(anchorString);
-    console.log(`${coreIndexFileUri} ${numberOfOperations}`);
-    //const now = new Date();
+
+    const now = moment();
+    const currentDate = now.format('DDHHmmssSSS');
+    const transactionTime = parseInt(currentDate);
+    const transactionTimeHash = crypto
+      .createHash('SHA256')
+      .update(now.toISOString())
+      .digest('base64');
+
+    const insertQuery = `INSERT INTO [${this.transactionTable}]
+                            ([CoreIndexFileUri]
+                            ,[NumberOfOperations]
+                            ,[TransactionTime]
+                            ,[TransactionTimeHash])
+                         VALUES
+                          ('${coreIndexFileUri}'
+                            ,${numberOfOperations}
+                            ,${transactionTime}
+                            ,'${transactionTimeHash}')`;
+    // console.log(insertQuery);
+    // this.ledgerConnection = await connect(this.connectionString);
+    const result = await this.ledgerConnection.query(insertQuery);
+    console.log(`Writing to ledger result ${JSON.stringify(result.output)}`);
   }
 
   public async read(
@@ -60,9 +111,61 @@ export default class AzureSqlDbLedger implements IBlockchain {
     moreTransactions: boolean;
     transactions: TransactionModelMsSqlDb[];
   }> {
-    console.log('Starting read transcation at: ', new Date());
-    const transactions: TransactionModelMsSqlDb[] = [];
-    console.log(`${sinceTransactionNumber} ${transactionTimeHash}`)
+    console.log('Starting read transaction at: ', new Date());
+
+    let sqlQuery;
+
+    if (sinceTransactionNumber && transactionTimeHash) {
+      sqlQuery = `SELECT TX.[CoreIndexFileUri]
+                        ,TX.[NumberOfOperations]
+                        ,TX.[TransactionTime]
+                        ,TX.[TransactionTimeHash]
+                        ,TX.[TransactionTime] TransactionNumber
+                        ,LTX.[commit_time] TransactionTimestamp
+                  FROM [RegistryDB].[dbo].[Transactions] TX
+                  INNER JOIN sys.database_ledger_transactions LTX ON TX.[ledger_start_transaction_id] = LTX.transaction_id
+                  WHERE TX.[TransactionTimeHash] = '${transactionTimeHash}' AND
+                  TX.[TransactionTime] >= ${sinceTransactionNumber}
+                  ORDER BY LTX.[commit_time] DESC`;
+    } else if (sinceTransactionNumber) {
+      sqlQuery = `SELECT TX.[CoreIndexFileUri]
+                        ,TX.[NumberOfOperations]
+                        ,TX.[TransactionTime]
+                        ,TX.[TransactionTimeHash]
+                        ,TX.[TransactionTime] TransactionNumber
+                        ,LTX.[commit_time] TransactionTimestamp
+                  FROM [RegistryDB].[dbo].[Transactions] TX
+                  INNER JOIN sys.database_ledger_transactions LTX ON TX.[ledger_start_transaction_id] = LTX.transaction_id
+                  WHERE TX.[TransactionTime] >= ${sinceTransactionNumber}
+                  ORDER BY LTX.[commit_time] DESC`;
+    } else if (transactionTimeHash) {
+      sqlQuery = `SELECT TX.[CoreIndexFileUri]
+                        ,TX.[NumberOfOperations]
+                        ,TX.[TransactionTime]
+                        ,TX.[TransactionTimeHash]
+                        ,TX.[TransactionTime] TransactionNumber
+                        ,LTX.[commit_time] TransactionTimestamp
+                  FROM [RegistryDB].[dbo].[Transactions] TX
+                  INNER JOIN sys.database_ledger_transactions LTX ON TX.[ledger_start_transaction_id] = LTX.transaction_id
+                  WHERE TX.[TransactionTimeHash] = '${transactionTimeHash}' 
+                  ORDER BY LTX.[commit_time] DESC`;
+    } else {
+      sqlQuery = `SELECT TX.[CoreIndexFileUri]
+                        ,TX.[NumberOfOperations]
+                        ,TX.[TransactionTime]
+                        ,TX.[TransactionTimeHash]
+                        ,TX.[TransactionTime] TransactionNumber
+                        ,LTX.[commit_time] TransactionTimestamp
+                  FROM [RegistryDB].[dbo].[Transactions] TX
+                  INNER JOIN sys.database_ledger_transactions LTX ON TX.[ledger_start_transaction_id] = LTX.transaction_id
+                  ORDER BY LTX.[commit_time] DESC`;
+    }
+    console.debug(sqlQuery);
+    const result = await this.ledgerConnection.query(sqlQuery);
+    const transactions: TransactionModelMsSqlDb[] = ((result.recordset as unknown) as TransactionRecord[]).map(
+      this.toSidetreeTransaction
+    ) as TransactionModelMsSqlDb[];
+
     return {
       moreTransactions: false,
       transactions,
@@ -75,23 +178,70 @@ export default class AzureSqlDbLedger implements IBlockchain {
   };
 
   public async getLatestTime(): Promise<BlockchainTimeModel> {
-    // MS SQL Server with ledger on is a centralized block chain so it wouldn't
-    // ever been re-orged. Returning time value so reorg flag inside Observer.ts is always
-    // false.
-    return { time: 0, hash: '' };
+    const query = `SELECT TOP 1
+                       TX.[TransactionTime] time
+                      ,TX.[TransactionTimeHash] hash
+                   FROM [RegistryDB].[dbo].[Transactions] TX
+                   INNER JOIN sys.database_ledger_transactions LTX ON TX.[ledger_start_transaction_id] = LTX.transaction_id
+                   ORDER BY LTX.[commit_time] DESC`;
+    const result = await this.ledgerConnection.query(query);
+
+    if (result.recordset.length > 0) {
+      this.approximateTime = (result
+        .recordset[0] as unknown) as BlockchainTimeModel;
+    }
+
+    return this.approximateTime;
   }
 
-  getFee(_transactionTime: number): Promise<number> {
+  async getFee(_transactionTime: number): Promise<number> {
     return Promise.resolve(0);
   }
 
-  getValueTimeLock(
+  async getValueTimeLock(
     _lockIdentifier: string
   ): Promise<ValueTimeLockModel | undefined> {
     return Promise.resolve(undefined);
   }
 
-  getWriterValueTimeLock(): Promise<ValueTimeLockModel | undefined> {
+  async getWriterValueTimeLock(): Promise<ValueTimeLockModel | undefined> {
     return Promise.resolve(undefined);
+  }
+
+  private async ensureDbTableExists(dbTable: string): Promise<void> {
+    console.log(`Ensure generate the ${dbTable} table`);
+    const createQuery = `IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='${dbTable}' and xtype='U')
+                            CREATE TABLE [${dbTable}] (
+                            	[CoreIndexFileUri] VARCHAR(50) NOT NULL PRIMARY KEY,
+                              [NumberOfOperations] INT NOT NULL,
+                              [TransactionTime] BIGINT NOT NULL,
+                              [TransactionTimeHash] VARCHAR(50) NOT NULL
+                            )
+                            WITH (SYSTEM_VERSIONING = ON, LEDGER = ON);`;
+
+    console.debug(createQuery);
+    await this.ledgerConnection.query(createQuery);
+  }
+
+  private toSidetreeTransaction(txResult: TransactionRecord): TransactionModel {
+    const transactionTimeHash = txResult.TransactionTimeHash;
+    const transactionTime = txResult.TransactionTime;
+    const transactionNumber = txResult.TransactionNumber;
+    const transactionTimestamp = txResult.TransactionTimestamp.getTime();
+
+    const anchorString = AnchoredDataSerializer.serialize({
+      coreIndexFileUri: txResult.CoreIndexFileUri,
+      numberOfOperations: txResult.NumberOfOperations,
+    });
+    return {
+      transactionTime,
+      transactionNumber,
+      transactionTimeHash,
+      transactionTimestamp,
+      anchorString,
+      transactionFeePaid: 0,
+      normalizedTransactionFee: 0,
+      writer: 'writer',
+    } as any;
   }
 }
