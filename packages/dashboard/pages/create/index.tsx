@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -6,8 +6,6 @@ import { Button, Box, LinearProgress, Typography, Paper } from '@mui/material';
 
 import { AppPage } from '../../components/app-page';
 import { dashboardWalletFactory } from '../../core/DashboardWallet';
-import { FormEvent } from 'react';
-
 import { uiConfigs } from '../../config';
 import { createDID } from '../../services/sidetree-node-client-api';
 

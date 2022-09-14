@@ -1,0 +1,18 @@
+{
+  "storageContainerName": "sidetree-cas-azure-storage-test",
+  "storageConnectionString": "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+  "msSqlDbLedgerConnectionString": "Server=127.0.0.1;Database=RegistryDB;User Id=sa;Password=S3cur3P@ssW0rd!;Trusted_Connection=True;TrustServerCertificate=True;",
+  "msSqlDbLedgerTable": "Transactions",
+  "mongoDbConnectionString": "mongodb://localhost:27017/",
+  "didMethodName": "atom",
+  "databaseName": "atom-db",
+  "batchingIntervalInSeconds": 5,
+  "observingIntervalInSeconds": 5,
+  "maxConcurrentDownloads": 20,
+  "versions": [
+    {
+      "startingBlockchainTime": 0,
+      "version": "latest"
+    }
+  ]
+}

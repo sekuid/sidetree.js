@@ -1,0 +1,51 @@
+{
+  "name": "@sidetree/atom",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Thomas Tran (https://github.com/thomas-tran)",
+  "contributors": [
+    "Orie Steele (https://github.com/OR13)",
+    "gjgd (https://github.com/gjgd)"
+  ],
+  "module": "dist/atom.esm.js",
+  "version": "0.3.1-unstable.60",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "pretest": "docker-compose up -d mongo azurite ms-sql-server",
+    "test": "tsdx test --runInBand --passWithNoTests",
+    "lint": "tsdx lint src",
+    "lint:fix": "tsdx lint src --fix",
+    "prepare": "tsdx build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^3.0.0",
+    "@sidetree/common": "^0.3.1-unstable.60",
+    "@sidetree/test-vectors": "^0.3.1-unstable.60",
+    "@sidetree/wallet": "^0.3.1-unstable.60",
+    "@types/node": "^17.0.14",
+    "mssql": "9.0.1",
+    "mongodb": "^4.1.2",
+    "tsdx": "^0.14.1"
+  },
+  "dependencies": {
+    "@sidetree/cas": "^0.3.1-unstable.60",
+    "@sidetree/cas-azure-storage": "^0.3.1-unstable.60",
+    "@sidetree/did-method": "^0.3.1-unstable.60",
+    "@sidetree/ms-sqldb": "^0.3.1-unstable.60"
+  },
+  "homepage": "https://github.com/transmute-industries/sidetree.js/tree/main/packages/did-method-atom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/transmute-industries/sidetree.js.git",
+    "directory": "packages/did-method-atom"
+  },
+  "gitHead": "e97862f01a5ad9845d82eb57ca46d335a98aeb8b"
+}

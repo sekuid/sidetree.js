@@ -1,6 +1,6 @@
 import React from 'react';
-import { value Theme as ThemeType } from '@mui/material/styles';
-import { value createTheme, value ThemeProvider } from '@mui/material/styles';
+import { Theme as ThemeType } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // https://materialui.co/colors/
 
@@ -10,7 +10,7 @@ const primaryFont = 'Rajdhani';
 // const secondaryFont = "Roboto Condensed";
 const tertiaryFont = 'Lato';
 
-import { value ColorModeContext } from './dark-mode-toggle';
+import { ColorModeContext } from './dark-mode-toggle';
 
 export const Theme = ({ children }: { children: any }) => {
   const [mode, setMode] = React.useState('dark');

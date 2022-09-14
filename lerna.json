@@ -12,6 +12,8 @@
     "packages/did-method-element",
     "packages/did-method-photon",
     "packages/did-method-ion",
+    "packages/did-method-atom",
+    "packages/dashboard",
     "packages/ledger",
     "packages/ledger-ethereum",
     "packages/ledger-qldb",
