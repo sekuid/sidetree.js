@@ -33,8 +33,9 @@ export const SensitiveTextField = ({ label, value }: any) => {
               <IconButton
                 aria-label="Copy to clipboard"
                 onClick={() => {
-                  const myTemporaryInputElement =
-                    document.createElement('input');
+                  const myTemporaryInputElement = document.createElement(
+                    'input'
+                  );
                   myTemporaryInputElement.type = 'text';
                   myTemporaryInputElement.value = value;
                   document.body.appendChild(myTemporaryInputElement);

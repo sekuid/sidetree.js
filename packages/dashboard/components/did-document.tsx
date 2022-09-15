@@ -24,8 +24,10 @@ const ExpandMore = styled((props: any) => {
 }));
 
 export const DidDocument = ({ didDocument, operationCount, refresh }: any) => {
-  const [verificationMethodsExpanded, setVerificationMethodsExpanded] =
-    React.useState(false);
+  const [
+    verificationMethodsExpanded,
+    setVerificationMethodsExpanded,
+  ] = React.useState(false);
 
   const handleExpandVerificationMethods = () => {
     setVerificationMethodsExpanded(!verificationMethodsExpanded);

@@ -36,7 +36,8 @@ const example = {
   id: 'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW',
   verificationMethod: [
     {
-      id: 'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW#z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW',
+      id:
+        'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW#z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW',
       type: 'JsonWebKey2020',
       controller: 'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW',
       publicKeyJwk: {
@@ -46,7 +47,8 @@ const example = {
       },
     },
     {
-      id: 'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW#z6LSq1CX2VmDsnXTnJgWFUQyQnsX7LzgEEKfh4wPsoqCLnGi',
+      id:
+        'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW#z6LSq1CX2VmDsnXTnJgWFUQyQnsX7LzgEEKfh4wPsoqCLnGi',
       type: 'JsonWebKey2020',
       controller: 'did:key:z6MkmbnfArNcUhGX5GFtHfCXnz1ie8HL29Eaxj5Fi4HLmDRW',
       publicKeyJwk: {

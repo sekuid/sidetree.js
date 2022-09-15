@@ -2,7 +2,7 @@ import type { NextApiRequest } from 'next';
 import { getTestNodeIntance as testMethod } from '@sidetree/did-method';
 import { getNodeInstance as element } from '@sidetree/element';
 import { getNodeInstance as photon } from '@sidetree/photon';
-import { getNodeInstance as atom } from '@sidetree/atom';
+
 export * from './convertSidetreeStatusToHttpStatus';
 
 const methods: any = {
@@ -13,7 +13,6 @@ const methods: any = {
   'elem:ganache': element,
   'elem:ropsten': element,
   photon,
-  atom,
 };
 
 export interface SidetreeApiRequest extends NextApiRequest {
