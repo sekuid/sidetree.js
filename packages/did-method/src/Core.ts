@@ -176,7 +176,7 @@ export default class Core {
     await this.operationStore.stop();
 
     await this.versionManager.stop();
-
+    await this.blockchain.stop();
     await new Promise((resolve) => {
       setTimeout(resolve, 1 * 1000);
     });

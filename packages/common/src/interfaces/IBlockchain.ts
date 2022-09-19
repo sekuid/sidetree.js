@@ -76,4 +76,9 @@ export default interface IBlockchain {
    * @throws SidetreeError with ErrorCode.ValueTimeLockInPendingState if the lock is not yet confirmed on the blockchain.
    */
   getWriterValueTimeLock(): Promise<ValueTimeLockModel | undefined>;
+
+  /**
+   * Stop the ledger
+   */
+  stop(): Promise<void>;
 }

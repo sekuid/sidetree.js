@@ -25,6 +25,7 @@ const getLedger = async (config: AtomNodeConfigs) => {
   );
 
   await ledger.initialize();
+
   return ledger;
 };
 
@@ -35,6 +36,7 @@ const getCas = async (config: AtomNodeConfigs) => {
   );
 
   await cas.initialize();
+
   return cas;
 };
 

@@ -4,11 +4,11 @@ const isProd = process.env.NODE_ENV === 'production';
 module.exports = {
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
-  webpack5: false,
+  swcMinify: true,
   // Use the prefix in production and not development.
-  assetPrefix: isProd ? '' : '',
+  assetPrefix: isProd ? '/' : '/',
   // https://nextjs.org/docs/messages/import-esm-externals
-  experimental: { esmExternals: 'loose', outputFileTracing: true },
+  experimental: { esmExternals: false },
   // see https://github.com/vercel/vercel/issues/2569#issuecomment-514865342
   webpack(config, { isServer }) {
     if (isServer) {

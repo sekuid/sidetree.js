@@ -1,7 +1,7 @@
 import { SidetreeWalletPlugin } from '@sidetree/wallet';
 import vectors from '@sidetree/test-vectors';
 import Atom from '../Atom';
-import { clearCollection, delay, getTestAtom } from './utils';
+import { clearCollection, delay, getTestAtom, clearLedger } from './utils';
 import longFormResolutionResponse from './__fixtures__/long-form-resolution.json';
 import createOperation from './__fixtures__/create-operation.json';
 
@@ -13,6 +13,7 @@ beforeAll(async () => {
   await clearCollection('operations');
   await clearCollection('transactions');
   await clearCollection('queued-operations');
+  await clearLedger();
 });
 
 afterAll(async () => {
@@ -80,7 +81,7 @@ describe('CRUD', () => {
       expect(operation0.status).toBe('succeeded');
       expect(operation0.body).toBeDefined();
 
-      await delay(15 * 1000);
+      await delay(15 * 2000);
 
       const did = `did:atom:${uniqueSuffix}`;
       const operation1 = await atom.handleResolveRequest(did);
@@ -96,7 +97,7 @@ describe('CRUD', () => {
       expect(operation0.status).toBe('succeeded');
       expect(operation0.body).toBeDefined();
 
-      await delay(15 * 1000);
+      await delay(15 * 2000);
 
       const did = `did:atom:${uniqueSuffix2}`;
       const operation1 = await atom.handleResolveRequest(did);

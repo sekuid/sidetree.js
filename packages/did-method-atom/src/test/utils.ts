@@ -1,3 +1,4 @@
+import { connect } from 'mssql';
 import { getNodeInstance } from '..';
 import config from './atom-config.json';
 const { MongoClient } = require('mongodb');
@@ -16,6 +17,12 @@ export const clearCollection = async (collectionName: string) => {
   const collection = db.collection(collectionName);
   await collection.deleteMany({});
   await client.close();
+};
+
+export const clearLedger = async () => {
+  const deleteQuery = `DELETE FROM ${config.msSqlDbLedgerTable}`;
+  const pool = await connect(config.msSqlDbLedgerConnectionString);
+  await pool.query(deleteQuery);
 };
 
 export const getTestAtom = async (): Promise<any> => {

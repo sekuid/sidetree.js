@@ -26,7 +26,7 @@ export interface TransactionModelMsSqlDb extends TransactionModel {
 }
 
 export default class AzureSqlDbLedger implements IBlockchain {
-  public ledgerConnection: ConnectionPool;
+  private ledgerConnection: ConnectionPool;
 
   constructor(
     public transactionTable: string,
@@ -52,7 +52,7 @@ export default class AzureSqlDbLedger implements IBlockchain {
     await this.ensureDbTableExists(this.transactionTable);
 
     // delete all data
-    const deleteQuery = `DELETE ${this.transactionTable}`;
+    const deleteQuery = `DELETE FROM ${this.transactionTable}`;
 
     // execute query
     await this.ledgerConnection.query(deleteQuery);
@@ -100,8 +100,8 @@ export default class AzureSqlDbLedger implements IBlockchain {
                             ,'${transactionTimeHash}')`;
     // console.log(insertQuery);
     // this.ledgerConnection = await connect(this.connectionString);
-    const result = await this.ledgerConnection.query(insertQuery);
-    console.log(`Writing to ledger result ${JSON.stringify(result.output)}`);
+    await this.ledgerConnection.query(insertQuery);
+    // console.log(`Writing to ledger result ${JSON.stringify(result.output)}`);
   }
 
   public async read(
@@ -160,7 +160,7 @@ export default class AzureSqlDbLedger implements IBlockchain {
                   INNER JOIN sys.database_ledger_transactions LTX ON TX.[ledger_start_transaction_id] = LTX.transaction_id
                   ORDER BY LTX.[commit_time] DESC`;
     }
-    console.debug(sqlQuery);
+    // console.debug(sqlQuery);
     const result = await this.ledgerConnection.query(sqlQuery);
     const transactions: TransactionModelMsSqlDb[] = ((result.recordset as unknown) as TransactionRecord[]).map(
       this.toSidetreeTransaction
@@ -194,6 +194,12 @@ export default class AzureSqlDbLedger implements IBlockchain {
     return this.approximateTime;
   }
 
+  public async stop(): Promise<void> {
+    if (this.ledgerConnection.connected) {
+      await this.ledgerConnection.close();
+    }
+  }
+
   async getFee(_transactionTime: number): Promise<number> {
     return Promise.resolve(0);
   }
@@ -219,7 +225,7 @@ export default class AzureSqlDbLedger implements IBlockchain {
                             )
                             WITH (SYSTEM_VERSIONING = ON, LEDGER = ON);`;
 
-    console.debug(createQuery);
+    // console.debug(createQuery);
     await this.ledgerConnection.query(createQuery);
   }
 

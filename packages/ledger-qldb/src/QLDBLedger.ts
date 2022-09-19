@@ -244,4 +244,8 @@ export default class QLDBLedger implements IBlockchain {
   getWriterValueTimeLock(): Promise<ValueTimeLockModel | undefined> {
     return Promise.resolve(undefined);
   }
+
+  public async stop(): Promise<void> {
+    await this.qldbDriver.close();
+  }
 }

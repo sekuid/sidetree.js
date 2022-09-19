@@ -20,7 +20,7 @@ describe('AzureSqlDbLedger tests', () => {
   });
 
   afterAll(async () => {
-    await ledger.ledgerConnection.close();
+    await ledger.stop();
   });
 
   it('gets service version', async () => {

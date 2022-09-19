@@ -278,4 +278,8 @@ export default class MockQLDBLedger implements IBlockchain {
     }
     return this.approximateTime;
   }
+
+  public async stop(): Promise<void> {
+    return;
+  }
 }

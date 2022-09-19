@@ -160,4 +160,8 @@ export default class MockLedger implements IBlockchain {
   public setLatestTime(time: BlockchainTimeModel): void {
     this.latestTime = time;
   }
+
+  public async stop(): Promise<void> {
+    return;
+  }
 }

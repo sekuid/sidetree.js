@@ -254,4 +254,8 @@ export default class EthereumLedger implements IBlockchain {
   getWriterValueTimeLock(): Promise<ValueTimeLockModel | undefined> {
     return Promise.resolve(undefined);
   }
+
+  public async stop(): Promise<void> {
+    return;
+  }
 }
