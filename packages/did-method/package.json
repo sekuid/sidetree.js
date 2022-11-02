@@ -41,7 +41,7 @@
     "@sidetree/core": "^0.3.1-unstable.60",
     "@sidetree/db": "^0.3.1-unstable.60",
     "@sidetree/ledger": "^0.3.1-unstable.60",
-    "mongodb": "^4.1.2",
+    "mongodb": "^4.11.0",
     "semver": "^7.3.5",
     "time-span": "3.1.0"
   },

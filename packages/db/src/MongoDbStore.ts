@@ -28,6 +28,7 @@ export default class MongoDbStore {
   public async initialize(): Promise<void> {
     const client = await MongoClient.connect(this.serverUrl, {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
     }); // `useNewUrlParser` addresses nodejs's URL parser deprecation warning.
     this.client = client;
     this.db = client.db(this.databaseName);

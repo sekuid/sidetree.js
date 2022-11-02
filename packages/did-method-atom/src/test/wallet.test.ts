@@ -16,9 +16,6 @@ beforeAll(async () => {
   await clearLedger();
 });
 
-afterAll(async () => {
-  await atom.shutdown();
-});
 
 jest.setTimeout(60 * 1000);
 
